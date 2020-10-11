@@ -2,24 +2,22 @@ import {AutomataState} from '../AutomataState'
 
 export function twoNeighborStateGeneration(previousAutomata: AutomataState): AutomataState {
 
-    let lastGeneration = previousAutomata.automata[previousAutomata.generationNumber]
+    let lastGeneration : Array<boolean> = previousAutomata.automata.get(previousAutomata.generationNumber) || new Array<boolean>();
+
+    let boolArray: Array<boolean>;
 
     let nextAutomata: AutomataState = {
-        automata: [...previousAutomata.automata], 
+        automata: new Map<number, Array<boolean>>(previousAutomata.automata), 
         generationNumber: previousAutomata.generationNumber + 1, 
-        generateForRules: previousAutomata.generateForRules}
+        generateForRules: previousAutomata.generateForRules
+    }
 
-    let boolArray: Array<boolean> = lastGeneration.map((value, index) => {
-        return getLeftNeighbor(lastGeneration, index)
-                 && getRightNeighbor(lastGeneration, index)       
-    })
-
-    console.log("Next generation: " + boolArray)
-
-    if (previousAutomata.generationNumber > previousAutomata.automata.length - 1) {
-        nextAutomata.automata = [...nextAutomata.automata, boolArray]
-    } else {
-        nextAutomata.automata[nextAutomata.generationNumber] = boolArray
+    if(lastGeneration){
+        boolArray = lastGeneration.map((value, index) => {
+            return getLeftNeighbor(lastGeneration, index)
+                     && getRightNeighbor(lastGeneration, index)       
+        });
+        nextAutomata.automata.set(nextAutomata.generationNumber, boolArray)
     }
 
     return nextAutomata
@@ -27,7 +25,6 @@ export function twoNeighborStateGeneration(previousAutomata: AutomataState): Aut
 
 function getLeftNeighbor(previousGeneration: Array<boolean>, currentIndex: number): boolean {
     return currentIndex === 0 ? false : previousGeneration[currentIndex - 1]
-        return false
 }
 
 function getRightNeighbor(previousGeneration: Array<boolean>, currentIndex: number): boolean {

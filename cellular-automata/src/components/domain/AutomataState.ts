@@ -1,5 +1,5 @@
 export interface AutomataState {
-    automata: Array<Array<boolean>>,
+    automata: Map<number, Array<boolean>>,
     generationNumber: number,
     
     generateForRules: (previousState: AutomataState) => AutomataState 
